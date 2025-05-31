@@ -60,6 +60,6 @@ curl -k -i -c jar.txt -X POST https://localhost/auth/login -H "Content-Type: app
 
 curl -L -k -i -b jar.txt -H "Authorization: Bearer <Token>" https://localhost/
 
-If successful, a `Set-Cookie` header is returned; reuse it with `-b jar.txt` for subsequent calls.
+**If successful, you'll get HTML Tags**.
 
 ---
