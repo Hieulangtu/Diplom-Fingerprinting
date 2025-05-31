@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  ja4-nginx:
+    image: ghcr.io/foxio-llc/ja4-nginx-module:v1.3.0-beta
+    container_name: ja4-nginx-2
+    ports: #public
+      - "80:80"
+      - "443:443"
+      # - "33001:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf/nginx.conf:ro
+      - ./nginx/certs/cert.pem:/etc/nginx/conf/cert.pem:ro
+      - ./nginx/certs/key.pem:/etc/nginx/conf/key.pem:ro
+    depends_on:
+      - fingerprint-api
+    networks:
+      - shared-net-uois
+
+  fingerprint-api:
+    # build: ./backend #  Dockerfile
+    build: ./backend
+    env_file: .env #  DATABASE_URL, REDIS_URL
+    expose:
+      - "8000" # docker network
+    volumes:
+      - ../fastAPI-fingerprinting/runtime-logs:/code/logs # t host -> container
+    depends_on:
+      - fingerprint-postgres
+      - fingerprint-redis
+    networks:
+      - shared-net-uois
+
+  fingerprint-postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: pizza
+      POSTGRES_USER: pizza_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pizza_pass}
+
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - shared-net-uois
+
+  fingerprint-redis:
+    image: redis:7
+    networks:
+      - shared-net-uois
+
+networks:
+  shared-net-uois:
+    external: true
+
+volumes:
+  db-data:
