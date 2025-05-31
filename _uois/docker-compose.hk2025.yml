@@ -31,10 +31,10 @@ services:
       timeout: 10s
     restart: on-failure:3 # nedojde k restartu pokud je kontejner "unhealthy", maximalne 3 pokusy
 
-    ports: #hidden frontend
-      - 33001:8000
-    # expose:
-    #   - "8000"
+    # ports: #hidden frontend
+    #   - 33001:8000
+    expose:
+      - "8000"
 
     volumes:
       - <<: *system-data-volume
