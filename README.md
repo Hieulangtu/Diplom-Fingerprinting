@@ -48,13 +48,16 @@ You’ll get Swagger / OpenAPI where you can test the fingerprinting endpoints.
 
 ### UOIS service (curl only)
 
-#Sign up
+**Sign up**
+
 curl -k -X POST https://localhost/auth/signup -H "Content-Type: application/json" -d "{\"username\":\"newuser\",\"email\":\"newuser@example.com\",\"password\":\"pass\",\"is_staff\":false,\"is_active\":true}"
 
-#Log in
+**Log in**
+
 curl -k -i -c jar.txt -X POST https://localhost/auth/login -H "Content-Type: application/json" -d "{\"username\":\"newuser\",\"password\":\"pass\"}"
 
-#access (Take the access token from Log in phase)
+**access server** (Take the access token from Log in phase)
+
 curl -L -k -i -b jar.txt -H "Authorization: Bearer <Token>" https://localhost/
 
 If successful, a `Set-Cookie` header is returned; reuse it with `-b jar.txt` for subsequent calls.
